@@ -37,6 +37,12 @@
   "fecha": "2026-11-15",
   "descripcion": "Manual para aprender a publicar y actualizar el blog desde MAX 12 utilizando Git.",
   "url": "publicaciones/guia-git-github-pages.html"
+},
+{
+  "titulo": "Automatizar la publicación de mi blog con Git",
+  "fecha": "2026-11-15",
+  "descripcion": "Aprender a publicar nuevas entradas en GitHub Pages mediante un script Bash en MAX 12.",
+  "url": "publicaciones/automatizar-publicacion-github.html"
 }
 
 

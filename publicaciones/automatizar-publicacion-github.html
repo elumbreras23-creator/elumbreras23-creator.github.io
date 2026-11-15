@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Automatizar la publicación del blog | Git y GitHub Pages</title><style>
+:root{--bg:#f3f6fb;--ink:#18253d;--muted:#586781;--blue:#245bd6;--navy:#102449;--line:#dce4f0;--green:#087a58}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}header{background:linear-gradient(125deg,#102449,#2253a5);color:white;padding:64px 22px 54px}header .wrap,main,footer{max-width:970px;margin:auto}header .tag{font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;color:#c6ddff;font-weight:700}h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.12;margin:12px 0 16px}header p{max-width:730px;color:#e0eaff;font-size:1.13rem}main{padding:30px 18px 60px}.card{background:white;border:1px solid var(--line);border-radius:17px;padding:28px;margin:20px 0;box-shadow:0 5px 22px #1b3a6b0a}h2{font-size:1.45rem;color:var(--navy);margin:0 0 12px}h3{font-size:1.1rem;margin:20px 0 8px}p{margin:10px 0}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.91em}p code,li code{background:#edf2fa;padding:2px 5px;border-radius:5px}pre{background:#101d33;color:#e5efff;border-radius:12px;padding:20px;overflow-x:auto;line-height:1.5;font-size:.89rem}pre code{font-size:inherit}.note{border-left:4px solid #d79a19;background:#fff8e8;padding:13px 17px;border-radius:6px}.success{border-left:4px solid var(--green);background:#ebfaf4;padding:13px 17px;border-radius:6px}.flow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}.flow div{background:#eef4ff;border:1px solid #cbdcfb;padding:16px;border-radius:11px;text-align:center;font-weight:700}.flow span{display:block;font-size:.8rem;color:var(--muted);font-weight:400}.btn{display:inline-block;background:var(--blue);color:#fff;text-decoration:none;padding:11px 17px;border-radius:9px;font-weight:700}.btn:hover{background:#1845ab}ul,ol{padding-left:23px}li{margin:6px 0}footer{padding:0 18px 36px;color:var(--muted);font-size:.92rem}details{border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-top:12px}summary{cursor:pointer;font-weight:700}table{border-collapse:collapse;width:100%;font-size:.95rem}th,td{text-align:left;border-bottom:1px solid var(--line);padding:11px 9px}th{background:#f2f6fd}@media(max-width:640px){.flow{grid-template-columns:1fr}.card{padding:19px}header{padding:42px 20px}}@media print{header{background:white;color:black;padding:15px 0}header p{color:black}.card{box-shadow:none;break-inside:avoid}body{background:white}pre{white-space:pre-wrap}}
+</style></head><body><header><div class="wrap"><div class="tag">Manual práctico · MAX 12 · Apache · GitHub Pages</div><h1>Publicar mi blog con un solo comando</h1><p>Cómo automatizar la copia de los archivos de Apache, registrar cambios con Git y actualizar tu web pública sin memorizar todos los comandos.</p></div></header><main>
+<section class="card"><h2>1. ¿Qué vamos a conseguir?</h2><p>Seguiremos creando y probando las páginas en <strong>Apache local</strong>. Cuando estén listas, ejecutaremos <code>publicar-web</code> y el script preparará el envío a GitHub.</p><div class="flow"><div>Geany + Apache<span>/var/www/html/</span></div><div>Script Bash + Git<span>~/mi-web-github/</span></div><div>GitHub Pages<span>Web pública</span></div></div><p>El script copiará <code>index.html</code>, <code>entradas.js</code>, <code>entradas.json</code> y los archivos HTML de <code>publicaciones/</code>. Después mostrará los cambios y pedirá confirmación antes de subirlos.</p><p class="note"><strong>Antes de publicar:</strong> revisa que no haya nombres, teléfonos, correos, textos privados u otros datos que no quieras mostrar. Los commits pueden conservar versiones anteriores.</p></section>
+<section class="card"><h2>2. Crear el script en MAX 12</h2><p>Abre una terminal gráfica como usuario <code>madrid</code> (no como <code>root</code>) y ejecuta:</p><pre><code>mkdir -p ~/bin
+geany ~/bin/publicar-web</code></pre><p>Copia en Geany el siguiente script completo y guárdalo con <strong>Ctrl + S</strong>.</p><pre><code>#!/bin/bash
+set -e
+
+ORIGEN="/var/www/html"
+DESTINO="$HOME/mi-web-github"
+
+echo "=================================="
+echo " PUBLICADOR DE MI BLOG"
+echo "=================================="
+
+# Comprobar que existe el repositorio local
+if [ ! -d "$DESTINO/.git" ]; then
+    echo "ERROR: no encuentro el repositorio en $DESTINO"
+    exit 1
+fi
+
+cd "$DESTINO"
+
+# Copiar únicamente los archivos de nuestro blog
+cp "$ORIGEN/index.html" .
+cp "$ORIGEN/entradas.js" .
+cp "$ORIGEN/entradas.json" .
+
+# Copiar las publicaciones HTML sin borrar las anteriores
+mkdir -p publicaciones
+cp "$ORIGEN"/publicaciones/*.html publicaciones/
+
+echo ""
+echo "Cambios detectados:"
+git status --short
+
+if [ -z "$(git status --porcelain)" ]; then
+    echo "No hay cambios que publicar."
+    exit 0
+fi
+
+echo ""
+read -r -p "¿Quieres publicar estos cambios? (s/n): " RESPUESTA
+
+if [ "$RESPUESTA" != "s" ]; then
+    echo "Publicación cancelada."
+    exit 0
+fi
+
+git add index.html entradas.js entradas.json publicaciones/
+
+# Evitar un commit vacío si hubiera otros cambios ajenos
+if git diff --cached --quiet; then
+    echo "No hay cambios preparados para publicar."
+    exit 0
+fi
+
+git commit -m "Actualizar blog $(date +%Y-%m-%d_%H:%M)"
+git push
+
+echo ""
+echo "¡Cambios enviados a GitHub!"
+echo "https://elumbreras23-creator.github.io/"</code></pre><p class="note">El script <strong>no borra</strong> automáticamente los archivos antiguos en GitHub. Tampoco copia otras aplicaciones de Apache, como Moodle o WordPress. Si GitHub solicita credenciales, utiliza tu token, nunca tu contraseña habitual.</p></section>
+<section class="card"><h2>3. Dar permiso de ejecución y probarlo</h2><pre><code>chmod +x ~/bin/publicar-web
+~/bin/publicar-web</code></pre><p>Verás la lista de archivos modificados y la pregunta <code>¿Quieres publicar estos cambios? (s/n):</code>. Escribe <code>s</code> para continuar o <code>n</code> para cancelar.</p><p class="success"><strong>Importante:</strong> el script no publica nada hasta que confirmas. Si no hay cambios, termina sin crear commits.</p></section>
+<section class="card"><h2>4. Ejecutarlo desde cualquier carpeta</h2><p>Comprueba si <code>~/bin</code> ya está en tu variable <code>PATH</code>:</p><pre><code>echo "$PATH"</code></pre><p>Si no aparece <code>/home/madrid/bin</code>, añade esta línea al final de <code>~/.bashrc</code>:</p><pre><code>export PATH="$HOME/bin:$PATH"</code></pre><p>Recarga la configuración:</p><pre><code>source ~/.bashrc</code></pre><p>Desde ese momento podrás escribir simplemente:</p><pre><code>publicar-web</code></pre></section>
+<section class="card"><h2>5. Publicar una nueva entrada: ejemplo real</h2><ol><li>Guarda una página nueva en <code>/var/www/html/publicaciones/</code>, por ejemplo <code>automatizar-publicacion-github.html</code>.</li><li>Abre <code>/var/www/html/entradas.json</code> y añade un objeto con título, fecha, descripción y URL. Recuerda separar los objetos con comas.</li><li>Comprueba la entrada en <code>http://localhost/</code> y abre su enlace para verificar que funciona.</li><li>Ejecuta <code>publicar-web</code>, revisa los cambios y confirma con <code>s</code>.</li><li>Espera a que GitHub Pages termine el despliegue y comprueba la web pública.</li></ol><p>Ejemplo de objeto para <code>entradas.json</code>:</p><pre><code>{
+  "titulo": "Automatizar la publicación con Git",
+  "fecha": "2026-11-15",
+  "descripcion": "Guía para actualizar el blog desde MAX 12 con un script Bash.",
+  "url": "publicaciones/automatizar-publicacion-github.html"
+}</code></pre><p class="note">Este bloque es <strong>un objeto dentro del array</strong> de <code>entradas.json</code>, no un archivo JSON completo. Si lo añades después de otra entrada, pon una coma entre ambos objetos.</p></section>
+<section class="card"><h2>6. Entender los comandos Git que automatizamos</h2><table><thead><tr><th>Comando</th><th>Para qué sirve</th></tr></thead><tbody><tr><td><code>git status</code></td><td>Muestra archivos nuevos o modificados.</td></tr><tr><td><code>git add</code></td><td>Prepara los cambios que queremos guardar.</td></tr><tr><td><code>git commit</code></td><td>Crea una versión en el historial local.</td></tr><tr><td><code>git push</code></td><td>Envía los commits al repositorio remoto.</td></tr><tr><td><code>git log --oneline -5</code></td><td>Permite ver los últimos cinco commits.</td></tr></tbody></table></section>
+<section class="card"><h2>7. Problemas habituales</h2><details><summary>Git dice «Everything up-to-date»</summary><p>No hay commits nuevos para enviar. Comprueba que has guardado los cambios en <code>/var/www/html/</code> y que el script los ha copiado a <code>~/mi-web-github/</code>.</p></details><details><summary>El navegador sigue mostrando la versión anterior</summary><p>Comprueba el último despliegue en <strong>GitHub → Actions</strong>. Si terminó correctamente, prueba <strong>Ctrl + F5</strong> o una ventana privada.</p></details><details><summary>Geany muestra «cannot open display»</summary><p>Abre una terminal desde el escritorio gráfico como usuario <code>madrid</code>, en lugar de una sesión <code>su - madrid</code> sin acceso al entorno gráfico.</p></details><details><summary>El script indica «Permission denied»</summary><p>Comprueba que has ejecutado <code>chmod +x ~/bin/publicar-web</code> y que los archivos del blog se pueden leer con tu usuario.</p></details><details><summary>He eliminado una entrada pero sigue en GitHub</summary><p>Este script copia y actualiza, pero no elimina archivos remotos. Las eliminaciones se deben revisar y gestionar por separado para evitar borrar contenido accidentalmente.</p></details><details><summary>Quiero publicar información que antes era privada</summary><p>Comprueba el contenido antes de subirlo. Si ya publicaste datos sensibles, modificarlos en un commit nuevo no los elimina del historial anterior de Git.</p></details></section>
+<section class="card"><h2>8. Tu rutina a partir de ahora</h2><p><strong>Editar → probar en localhost → ejecutar <code>publicar-web</code> → confirmar → comprobar GitHub Pages.</strong></p><p>Cuando domines este proceso, el siguiente paso puede ser crear un lanzador en el escritorio de MAX 12 para publicar sin escribir comandos.</p><a class="btn" href="../index.html">← Volver a las publicaciones</a></section>
+</main><footer>Guía práctica para un blog estático alojado en GitHub Pages · MAX 12 / Apache / Git</footer></body></html>
