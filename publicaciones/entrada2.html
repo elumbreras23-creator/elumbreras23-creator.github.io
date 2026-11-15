@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cómo funciona mi web: JSON y JavaScript | MAX 12</title>
+<style>
+:root{--navy:#152e43;--blue:#176f9b;--pale:#eef6fa;--ink:#243744;--muted:#5e7380;--line:#dce6eb;--green:#137b64}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f4f7f9;color:var(--ink);font:16px/1.7 system-ui,-apple-system,Segoe UI,sans-serif}header{background:linear-gradient(125deg,#122b40,#1b5877);color:white;padding:52px max(24px,calc((100% - 1050px)/2)) 42px}header small{letter-spacing:.13em;text-transform:uppercase;color:#bfe2f3}h1{font-size:clamp(2rem,4vw,3.1rem);line-height:1.2;margin:14px 0}header p{max-width:760px;color:#e1eff5;font-size:1.12rem}.layout{max-width:1100px;margin:30px auto;display:grid;grid-template-columns:230px minmax(0,1fr);gap:25px;padding:0 20px}aside{align-self:start;position:sticky;top:18px;background:white;border:1px solid var(--line);border-radius:14px;padding:20px}aside strong{display:block;margin-bottom:10px}aside a{display:block;color:#28698a;text-decoration:none;padding:6px 0;font-size:.92rem}aside a:hover{text-decoration:underline}main{min-width:0}section{background:white;border:1px solid var(--line);border-radius:16px;padding:26px 30px;margin-bottom:22px;box-shadow:0 3px 16px #18394d08}h2{color:var(--navy);font-size:1.55rem;margin:0 0 14px}h3{color:#205c7d;margin:24px 0 8px}p{margin:10px 0}code{background:#eaf2f6;color:#134f70;padding:2px 5px;border-radius:4px;font-size:.91em}pre{background:#132b3a;color:#e4f3fc;padding:20px;border-radius:11px;overflow-x:auto;line-height:1.55;font-size:.88rem}pre code{background:none;color:inherit;padding:0}.note{border-left:4px solid var(--blue);background:var(--pale);padding:13px 17px;border-radius:0 9px 9px 0;margin:18px 0}.ok{border-left-color:var(--green);background:#edf8f4}.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:20px 0}.node{background:#eaf4f9;border:1px solid #c7e1ed;border-radius:9px;padding:12px 15px;font-weight:650}.arrow{color:var(--blue);font-weight:bold}table{border-collapse:collapse;width:100%;font-size:.95rem}th,td{border-bottom:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}th{background:#edf5f8}ol li,ul li{margin:7px 0}.pill{display:inline-block;background:#e2f3fa;color:#135779;border-radius:999px;padding:3px 11px;font-size:.82rem;font-weight:700;margin:0 5px 8px 0}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}.actions a{background:#176f9b;color:white;padding:10px 16px;border-radius:8px;text-decoration:none}.actions a.secondary{background:#eaf2f6;color:#175675}footer{text-align:center;color:var(--muted);padding:25px}@media(max-width:760px){.layout{display:block}aside{position:static;margin-bottom:20px}section{padding:22px 18px}.flow{flex-direction:column;align-items:stretch}.arrow{text-align:center;transform:rotate(90deg)}}
+</style>
+</head>
+<body>
+<header><small>Manual técnico · Servidor local Apache · Linux MAX 12</small><h1>Cómo funciona mi web con JSON y JavaScript</h1><p>Una explicación paso a paso del sistema de publicaciones que has montado: de los archivos del servidor a las entradas que ves en <strong>http://localhost/</strong>.</p><span class="pill">HTML</span><span class="pill">JSON</span><span class="pill">JavaScript</span><span class="pill">Apache</span></header>
+<div class="layout">
+<aside><strong>Contenido</strong><a href="#objetivo">1. Qué hemos construido</a><a href="#archivos">2. Archivos y rutas</a><a href="#flujo">3. Recorrido de los datos</a><a href="#json">4. Qué es JSON</a><a href="#js">5. JavaScript, línea a línea</a><a href="#dom">6. HTML y DOM</a><a href="#cliente">7. Cliente y servidor</a><a href="#publicar">8. Cómo publicar</a><a href="#errores">9. Errores habituales</a><a href="#mejoras">10. Próximas mejoras</a><a href="../index.html">← Volver al inicio</a></aside>
+<main>
+<section id="objetivo"><h2>1. ¿Qué hemos construido?</h2><p>Una página principal que muestra una lista de publicaciones. Los datos de esa lista no están escritos dentro de <code>index.html</code>: se guardan en <code>entradas.json</code>. Cuando Firefox abre la página, <code>entradas.js</code> lee esos datos, los ordena y crea los elementos HTML que ves en pantalla.</p><div class="note ok"><strong>Idea clave:</strong> para añadir una publicación normal, no hace falta cambiar <code>index.html</code> ni <code>entradas.js</code>. Se crea la página de la publicación y se registra en el JSON.</div></section>
+<section id="archivos"><h2>2. Archivos y rutas del proyecto</h2><pre><code>/var/www/html/
+├── index.html              ← Página principal
+├── entradas.js             ← Lógica para mostrar entradas
+├── entradas.json           ← Datos de las publicaciones
+└── publicaciones/
+    ├── entrada1.html       ← Manual de publicación
+    ├── entrada2.html       ← Este manual técnico
+    └── nueva-entrada.html  ← Otra publicación (si existe)</code></pre><p>Las rutas de arriba son las previstas para este modelo. Comprueba cuáles existen realmente en tu equipo.</p><table><thead><tr><th>Archivo</th><th>Responsabilidad</th></tr></thead><tbody><tr><td><code>index.html</code></td><td>La estructura de la portada y el contenedor vacío de entradas.</td></tr><tr><td><code>entradas.json</code></td><td>La fuente de datos: título, fecha, resumen y enlace de cada publicación.</td></tr><tr><td><code>entradas.js</code></td><td>La lógica que obtiene los datos y construye la lista.</td></tr><tr><td><code>publicaciones/*.html</code></td><td>El contenido completo de cada artículo.</td></tr></tbody></table></section>
+<section id="flujo"><h2>3. ¿Qué sucede al abrir localhost?</h2><div class="flow"><div class="node">Firefox solicita<br>localhost/</div><span class="arrow">→</span><div class="node">Apache entrega<br>index.html y JS</div><span class="arrow">→</span><div class="node">JS solicita<br>entradas.json</div><span class="arrow">→</span><div class="node">Firefox crea<br>las tarjetas HTML</div></div><ol><li>Firefox solicita <code>http://localhost/</code>.</li><li>Apache entrega la página principal, que enlaza el archivo <code>entradas.js</code>.</li><li>Firefox ejecuta JavaScript y este hace una segunda petición HTTP para obtener <code>entradas.json</code>.</li><li>El navegador convierte el JSON en objetos JavaScript, los ordena por fecha y construye los elementos visibles.</li><li>Cuando pulsas «Leer publicación», Firefox solicita el HTML indicado por el campo <code>url</code>.</li></ol><div class="note">Apache <strong>no interpreta ni ejecuta</strong> este JavaScript: lo sirve como archivo. En este modelo, el código se ejecuta en Firefox.</div></section>
+<section id="json"><h2>4. JSON: la fuente de datos</h2><p><strong>JSON</strong> significa <em>JavaScript Object Notation</em>. Es un formato de texto estructurado, muy utilizado para intercambiar datos. Aquí contiene un <strong>array</strong> (los corchetes) de <strong>objetos</strong> (las llaves).</p><pre><code>[
+  {
+    "titulo": "Mi primera publicación",
+    "fecha": "2026-11-15",
+    "descripcion": "Estoy aprendiendo HTML, JSON y JavaScript.",
+    "url": "publicaciones/entrada1.html"
+  },
+  {
+    "titulo": "Cómo funciona mi web",
+    "fecha": "2026-11-15",
+    "descripcion": "Explicación de JSON y JavaScript.",
+    "url": "publicaciones/entrada2.html"
+  }
+]</code></pre><h3>Reglas importantes</h3><ul><li>Las claves y los textos van entre <strong>comillas dobles</strong>.</li><li>Los objetos se separan mediante comas; <strong>el último no lleva coma</strong>.</li><li>La fecha usa <code>AAAA-MM-DD</code>, lo que facilita la ordenación como texto.</li><li>La URL es una ruta relativa a la página principal y debe apuntar a un HTML existente.</li><li>JSON no es una base de datos: es un archivo de datos que editamos y copiamos al servidor.</li></ul></section>
+<section id="js"><h2>5. JavaScript: cómo funciona cada instrucción</h2><p>Este es el código que hemos utilizado como modelo para <code>entradas.js</code>. Si has modificado el archivo después, puede haber diferencias con tu versión real.</p><pre><code>fetch("entradas.json")
+  .then(respuesta =&gt; {
+    if (!respuesta.ok) {
+      throw new Error("No se pudo cargar entradas.json");
+    }
+    return respuesta.json();
+  })
+  .then(entradas =&gt; {
+    const contenedor = document.getElementById("lista-publicaciones");
+    contenedor.innerHTML = "";
+
+    entradas.sort((a, b) =&gt; b.fecha.localeCompare(a.fecha));
+
+    entradas.forEach(entrada =&gt; {
+      const articulo = document.createElement("article");
+      const titulo = document.createElement("h3");
+      const fecha = document.createElement("p");
+      const descripcion = document.createElement("p");
+      const enlace = document.createElement("a");
+
+      titulo.textContent = entrada.titulo;
+      fecha.textContent = entrada.fecha;
+      descripcion.textContent = entrada.descripcion;
+      enlace.textContent = "Leer publicación";
+      enlace.href = entrada.url;
+
+      articulo.append(titulo, fecha, descripcion, enlace);
+      contenedor.appendChild(articulo);
+    });
+  })
+  .catch(error =&gt; {
+    console.error("Error cargando publicaciones:", error);
+    document.getElementById("lista-publicaciones").textContent =
+      "No se pudieron cargar las publicaciones.";
+  });</code></pre>
+<h3><code>fetch("entradas.json")</code></h3><p>Realiza una petición HTTP desde Firefox a Apache para recuperar el archivo JSON. Es asíncrona: el navegador no tiene que detener toda la página mientras espera la respuesta.</p>
+<h3><code>.then(...)</code> y <code>respuesta.json()</code></h3><p><code>then</code> indica qué hacer cuando se resuelve una promesa. <code>respuesta.ok</code> permite detectar respuestas HTTP fallidas, como 404. <code>respuesta.json()</code> lee el cuerpo de la respuesta y lo convierte en datos JavaScript.</p>
+<h3><code>const</code> y <code>getElementById()</code></h3><p><code>const</code> declara una referencia que no reasignaremos. <code>document.getElementById("lista-publicaciones")</code> busca el contenedor HTML por su identificador.</p>
+<h3><code>innerHTML = ""</code></h3><p>Vacía el contenido anterior del contenedor, incluido el mensaje de prueba «Aquí aparecerán las publicaciones».</p>
+<h3><code>sort()</code> y <code>localeCompare()</code></h3><p><code>sort</code> ordena el array. Con fechas escritas como <code>AAAA-MM-DD</code>, la comparación de cadenas permite ordenar de más reciente a más antigua. Si dos publicaciones tienen la misma fecha, este ejemplo no define una prioridad adicional.</p>
+<h3><code>forEach()</code></h3><p>Recorre todos los objetos del array. En cada vuelta, la variable <code>entrada</code> representa una publicación distinta.</p>
+<h3><code>createElement()</code>, <code>textContent</code> y <code>href</code></h3><p><code>createElement</code> crea etiquetas HTML en memoria. <code>textContent</code> coloca texto sin interpretarlo como HTML; <code>href</code> establece el destino del enlace. Finalmente, <code>append</code> y <code>appendChild</code> insertan los elementos en la página.</p>
+<h3><code>.catch()</code></h3><p>Captura errores de la cadena de promesas y muestra un mensaje para evitar que el usuario vea simplemente una sección vacía.</p></section>
+<section id="dom"><h2>6. El DOM: la conexión entre HTML y JavaScript</h2><p>El <strong>DOM</strong> (<em>Document Object Model</em>) es la representación de la página que maneja el navegador. JavaScript puede localizar nodos y crear otros nuevos.</p><pre><code>&lt;section id="publicaciones"&gt;
+  &lt;h2&gt;Últimas publicaciones&lt;/h2&gt;
+  &lt;div id="lista-publicaciones"&gt;
+    &lt;p&gt;Aquí aparecerán las publicaciones.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+
+&lt;!-- Al final del body --&gt;
+&lt;script src="entradas.js"&gt;&lt;/script&gt;</code></pre><p>Cuando JavaScript ejecuta <code>getElementById</code>, obtiene el <code>div</code>. Después inserta en él un <code>article</code> por cada objeto JSON. Por eso la página cambia sin que tengas que escribir manualmente las tarjetas en <code>index.html</code>.</p><div class="note">Colocamos el <code>script</code> al final de <code>body</code> para que el contenedor ya exista cuando se ejecute. Otra posibilidad sería cargar el script con <code>defer</code> desde <code>head</code>.</div></section>
+<section id="cliente"><h2>7. ¿Qué ocurre en el servidor y qué ocurre en el navegador?</h2><table><thead><tr><th>Apache (servidor)</th><th>Firefox (cliente)</th></tr></thead><tbody><tr><td>Guarda y entrega los archivos.</td><td>Interpreta HTML y CSS.</td></tr><tr><td>Responde a las peticiones de <code>index.html</code>, <code>entradas.js</code> y <code>entradas.json</code>.</td><td>Ejecuta JavaScript y solicita el JSON con <code>fetch</code>.</td></tr><tr><td>Entrega el HTML de una publicación al pulsar su enlace.</td><td>Genera los elementos DOM y muestra la lista ordenada.</td></tr></tbody></table><p>En este proyecto no necesitas PHP ni MariaDB para mostrar las publicaciones. Tampoco hay un panel de edición: el contenido se prepara con Geany.</p></section>
+<section id="publicar"><h2>8. Proceso de publicación habitual</h2><ol><li>Abre <strong>Geany</strong>.</li><li>Edita <code>/home/madrid/entradas.json</code> y añade un nuevo objeto con título, fecha, descripción y URL.</li><li>Guarda el JSON en tu carpeta personal.</li><li>Cópialo al servidor con el primer comando.</li><li>Crea en Geany el HTML completo de la nueva entrada, por ejemplo <code>/home/madrid/entrada3.html</code>.</li><li>Cópialo a la carpeta <code>publicaciones</code> con el segundo comando.</li><li>Abre <code>http://localhost/</code> y pulsa <strong>Ctrl + F5</strong>.</li></ol><pre><code>sudo cp /home/madrid/entradas.json /var/www/html/entradas.json
+sudo cp /home/madrid/entrada3.html /var/www/html/publicaciones/</code></pre><p>Comprueba el resultado abriendo <code>http://localhost/entradas.json</code> y, después, <code>http://localhost/publicaciones/entrada3.html</code>.</p><div class="note ok">El nombre indicado en el campo <code>url</code> debe coincidir exactamente con el archivo copiado a <code>publicaciones/</code>, incluidas mayúsculas y minúsculas.</div></section>
+<section id="errores"><h2>9. Problemas frecuentes y diagnóstico</h2><table><thead><tr><th>Síntoma</th><th>Qué comprobar</th></tr></thead><tbody><tr><td>No aparece la nueva entrada</td><td>Guardar Geany, copiar el JSON actualizado y recargar con Ctrl + F5.</td></tr><tr><td>«Leer publicación» da error 404</td><td>Comprobar que el archivo HTML existe y coincide con <code>url</code>.</td></tr><tr><td>«No se pudieron cargar las publicaciones»</td><td>Abrir F12 → Consola; comprobar JSON válido y respuesta de <code>fetch</code>.</td></tr><tr><td>La página muestra el texto de prueba</td><td>Comprobar que <code>entradas.js</code> está enlazado y que el <code>id</code> coincide.</td></tr><tr><td>Geany no permite guardar en Apache</td><td>Guardar en <code>/home/madrid/</code> y copiar con <code>sudo cp</code>.</td></tr></tbody></table><h3>Comandos de inspección</h3><pre><code>ls -lah /var/www/html/
+ls -lah /var/www/html/publicaciones/
+cat /var/www/html/entradas.json
+curl -I http://localhost/entradas.json</code></pre><p>Estos comandos permiten revisar archivos y comprobar la respuesta HTTP sin cambiar la configuración.</p></section>
+<section id="mejoras"><h2>10. Posibles mejoras</h2><ul><li>Crear una plantilla HTML común para todas las publicaciones.</li><li>Añadir estilos CSS a las tarjetas y fechas más legibles.</li><li>Mostrar únicamente las cinco entradas más recientes.</li><li>Añadir categorías, etiquetas o un buscador.</li><li>Más adelante, crear un formulario con PHP para publicar desde el navegador, si quieres evitar la edición manual.</li></ul><div class="note"><strong>Resumen:</strong> HTML define dónde se muestra el contenido; JSON guarda los datos; JavaScript lee, ordena y construye las entradas; Apache sirve los archivos; Firefox ejecuta JavaScript y presenta el resultado.</div><div class="actions"><a href="../index.html">← Volver a la página principal</a><a class="secondary" href="entrada1.html">Ver la guía de publicación</a></div></section>
+</main></div><footer>Manual de estudio · Apache + HTML + JSON + JavaScript · Linux MAX 12</footer>
+</body></html>

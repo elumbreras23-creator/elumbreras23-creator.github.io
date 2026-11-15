@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guía para publicar entradas | Apache, Geany y JSON</title>
+<style>
+:root{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;color:#1d2939;background:#f4f7fb}*{box-sizing:border-box}body{margin:0}.wrap{max-width:900px;margin:auto;padding:32px 20px 60px}header{background:#173451;color:white;padding:34px 20px}header .wrap{padding:0 20px}h1{font-size:clamp(1.65rem,4vw,2.4rem);margin:0 0 12px}header p{color:#d9e6f2;margin:0;line-height:1.6}.intro{background:#e8f1fb;border-left:4px solid #2864a0;padding:16px 20px;border-radius:6px;margin-bottom:24px}.step{background:white;border:1px solid #dce3eb;border-radius:12px;padding:20px 24px;margin:15px 0;box-shadow:0 2px 8px #1d29390b}.step h2{font-size:1.13rem;margin:0 0 12px;color:#173451}.num{display:inline-block;background:#173451;color:white;border-radius:50%;width:30px;height:30px;text-align:center;line-height:30px;margin-right:9px;font-size:.9rem}.step p,.step li{line-height:1.65}pre{background:#152536;color:#f4f7fb;padding:15px;border-radius:8px;overflow-x:auto;font-size:.92rem}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}p code,li code{background:#edf1f5;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}a{color:#145c9c}.note{color:#536579;font-size:.94rem}.footer{margin-top:30px;text-align:center}button{background:#173451;color:white;border:0;padding:11px 16px;border-radius:7px;cursor:pointer}@media print{header{background:white;color:black;padding:0}.step{box-shadow:none;break-inside:avoid}button{display:none}pre{color:black;background:#f0f0f0}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><h1>Guía de publicación de entradas</h1><p>Tu servidor local Apache en Linux MAX 12 · Geany + HTML + JSON + JavaScript</p></div></header>
+<main class="wrap">
+<div class="intro"><strong>Objetivo:</strong> añadir una publicación nueva a <a href="../index.html">la página principal</a> sin modificar <code>index.html</code> ni <code>entradas.js</code>. El archivo JSON contiene el catálogo de entradas y cada HTML contiene su texto completo.</div>
+<section class="step"><h2><span class="num">1</span>Abrir el editor Geany</h2><p>Inicia Geany desde el menú de aplicaciones de MAX o ejecuta en un terminal:</p><pre><code>geany</code></pre><p>Abre tu copia de <code>/home/madrid/entradas.json</code> mediante <strong>Archivo → Abrir</strong>.</p></section>
+<section class="step"><h2><span class="num">2</span>Modificar el JSON para registrar una nueva entrada</h2><p>Añade un objeto dentro de la lista de <code>entradas.json</code>, separado del anterior mediante una coma:</p><pre><code>{
+  "titulo": "Mi nueva publicación",
+  "fecha": "2026-11-15",
+  "descripcion": "Descripción breve de mi publicación.",
+  "url": "publicaciones/nueva-entrada.html"
+}</code></pre><p class="note">Conserva los corchetes <code>[ ]</code> del archivo y las entradas anteriores. Cada objeto lleva coma de separación excepto el último. La fecha sigue el formato AAAA-MM-DD. El nombre de la URL debe coincidir exactamente con el archivo HTML que crearás.</p></section>
+<section class="step"><h2><span class="num">3</span>Guardar el JSON en tu carpeta personal</h2><p>En Geany, guarda el archivo actualizado como:</p><pre><code>/home/madrid/entradas.json</code></pre><p>Si ya está abierto desde esa ruta, basta con <strong>Archivo → Guardar</strong> (Ctrl+S).</p></section>
+<section class="step"><h2><span class="num">4</span>Copiar el JSON a la raíz de Apache</h2><p>Abre un terminal y ejecuta:</p><pre><code>sudo cp /home/madrid/entradas.json /var/www/html/entradas.json</code></pre><p>Comprueba el catálogo servido por Apache en <a href="http://localhost/entradas.json">http://localhost/entradas.json</a>.</p></section>
+<section class="step"><h2><span class="num">5</span>Crear el nuevo fichero HTML en Geany</h2><p>Selecciona <strong>Archivo → Nuevo</strong> y escribe el contenido completo de tu publicación. Puedes usar esta plantilla:</p><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="es"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;title&gt;Mi nueva publicación&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Mi nueva publicación&lt;/h1&gt;
+  &lt;p&gt;Aquí escribo el contenido de la entrada.&lt;/p&gt;
+  &lt;a href="../index.html"&gt;Volver al inicio&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><p>Guárdalo en tu carpeta personal con el nombre indicado en el JSON:</p><pre><code>/home/madrid/nueva-entrada.html</code></pre></section>
+<section class="step"><h2><span class="num">6</span>Copiar el HTML al directorio de publicaciones de Apache</h2><p>Ejecuta:</p><pre><code>sudo cp /home/madrid/nueva-entrada.html /var/www/html/publicaciones/</code></pre><p>Comprueba la página en <a href="http://localhost/publicaciones/nueva-entrada.html">http://localhost/publicaciones/nueva-entrada.html</a>.</p></section>
+<section class="step"><h2><span class="num">7</span>Refrescar la página principal</h2><p>Abre <a href="http://localhost/">http://localhost/</a> en Firefox y pulsa <strong>Ctrl+F5</strong>. La nueva entrada aparecerá en <strong>Últimas publicaciones</strong>, ordenada por fecha. Haz clic en <strong>Leer publicación</strong> para abrir su HTML.</p><p class="note">Si el enlace da error 404, comprueba el nombre del archivo y la ruta <code>url</code> en el JSON. Si la entrada no aparece, comprueba que el JSON sea válido y que hayas copiado la versión actualizada.</p></section>
+<div class="intro"><strong>Recuerda:</strong> para cada nueva publicación modificas <code>entradas.json</code> y creas un nuevo archivo HTML. No necesitas tocar <code>entradas.js</code> ni reiniciar Apache.</div>
+<div class="footer"><p><a href="../index.html">← Volver a la página principal</a></p><button onclick="window.print()">Imprimir esta guía</button></div>
+</main>
+</body>
+</html>
