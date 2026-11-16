@@ -25,6 +25,12 @@
   "descripcion": "Dos prácticas para 1.º SMR: identificación de componentes internos y funcionamiento básico del ordenador.",
   "url": "publicaciones/practicas-ut02.html"
 },
+  {
+  "titulo": "UT02 - Práctica 02:El ordenador por dentro-Autocorregible",
+  "fecha": "2026-11-15T12:30:00",
+  "descripcion": "Prácticas de iniciación al hardware y funcionamiento del ordenador.",
+  "url": "publicaciones/practicas-ut02-autocorregibles.html"
+},
 
 {
   "titulo": "Guía práctica de Git y GitHub Pages",
