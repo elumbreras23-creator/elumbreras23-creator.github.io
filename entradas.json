@@ -100,6 +100,12 @@
   "fecha": "2026-11-16T19:00:00",
   "descripcion": "Entrenador interactivo autocorregible de 1.º SMR: 66 retos sobre discos y particiones, arranque dual, recuperación, Live/ISO, copias de seguridad, restauración y Clonezilla. Con explicaciones y reintentos.",
   "url": "publicaciones/entrenador-ut08-arranque-imagenes.html"
+},
+{
+  "titulo": "UT09 - Entrenador: Periféricos",
+  "fecha": "2026-11-16T19:30:00",
+  "descripcion": "Entrenador interactivo autocorregible de 1.º SMR con 103 preguntas sobre conexiones, USB, vídeo, audio, redes, alimentación y periféricos de entrada y salida. Corrección inmediata, explicaciones y reintentos.",
+  "url": "publicaciones/entrenador-ut09-perifericos.html"
 }
 
 
