@@ -49,6 +49,12 @@
   "fecha": "2026-11-16T10:00:00",
   "descripcion": "Guía para sincronizar mi web local con GitHub sin perder modificaciones.",
   "url": "publicaciones/sincronizar-git-github-apache.html"
+},
+  {
+  "titulo": "Publicar directamente en GitHub sin Apache",
+  "fecha": "2026-11-16T11:00:00",
+  "descripcion": "Guía para subir entradas HTML al blog desde cualquier ordenador y registrarlas en JSON.",
+  "url": "publicaciones/publicar-directamente-en-github.html"
 }
 
 
