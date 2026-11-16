@@ -86,7 +86,15 @@
   "fecha": "2026-11-16T15:05:00",
   "descripcion": "Actividad autocorregible sobre el primer encendido, mensajes POST y señales acústicas de error.",
   "url": "publicaciones/ut06-practica02-post-diagnostico-autocorregible.html"
+},
+  
+{
+  "titulo": "UT07 - Entrenador: Reparación de equipos",
+  "fecha": "2026-11-16T18:40:00",
+  "descripcion": "Entrenador interactivo autocorregible de 1.º SMR: 45 retos sobre mantenimiento, averías, señales, periféricos, limpieza y diagnóstico, con pistas y reintentos.",
+  "url": "publicaciones/entrenador-ut07-reparacion-equipos.html"
 }
+
 
 
 
