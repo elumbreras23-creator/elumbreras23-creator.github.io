@@ -27,12 +27,6 @@
 },
 
 {
-  "titulo": "UT02 - Práctica 03: Funcionamiento interno del ordenador",
-  "fecha": "2026-11-15T18:00h",
-  "descripcion": "Práctica avanzada de 1.º SMR sobre CPU, buses, registros, ALU, memoria y ciclo de instrucción, con simulador interactivo.",
-  "url": "publicaciones/practica03-ut02.html"
-},
-{
   "titulo": "Guía práctica de Git y GitHub Pages",
   "fecha": "2026-11-15",
   "descripcion": "Manual para aprender a publicar y actualizar el blog desde MAX 12 utilizando Git.",
@@ -55,6 +49,18 @@
   "fecha": "2026-11-16T11:00:00",
   "descripcion": "Guía para subir entradas HTML al blog desde cualquier ordenador y registrarlas en JSON.",
   "url": "publicaciones/publicar-directamente-en-github.html"
+},
+{
+  "titulo": "UT02 - Práctica 03: Software y arquitectura de Von Neumann",
+  "fecha": "2026-11-16T11:30:00",
+  "descripcion": "Reconocer los componentes de la CPU, memoria, buses y software de arranque.",
+  "url": "publicaciones/practica03-ut02-nueva.html"
+},
+{
+  "titulo": "UT02 - Práctica 04: Funcionamiento interno e instrucciones",
+  "fecha": "2026-11-16T11:35:00",
+  "descripcion": "Comprender el recorrido de las instrucciones mediante actividades y simulaciones.",
+  "url": "publicaciones/practica04-ut02-instrucciones.html"
 }
 
 
