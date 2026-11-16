@@ -67,6 +67,12 @@
   "fecha": "2026-11-16T11:35:00",
   "descripcion": "Comprender el recorrido de las instrucciones mediante actividades y simulaciones.",
   "url": "publicaciones/practica04-ut02-instrucciones.html"
+},
+{
+  "titulo": "UT01 - Práctica: Fundamentos de electricidad",
+  "fecha": "2026-11-14T11:00:00",
+  "descripcion": "Práctica interactiva y autocorregible sobre identificación de resistencias mediante códigos de colores, circuitos en serie, paralelo y mixtos, magnitudes eléctricas, ley de Ohm, potencia y conversiones de unidades.",
+  "url": "publicaciones/practica-electricidad-autocorregible.html"
 }
 
 
