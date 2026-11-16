@@ -73,7 +73,21 @@
   "fecha": "2026-11-14T11:00:00",
   "descripcion": "Práctica interactiva y autocorregible sobre identificación de resistencias mediante códigos de colores, circuitos en serie, paralelo y mixtos, magnitudes eléctricas, ley de Ohm, potencia y conversiones de unidades.",
   "url": "publicaciones/practica-electricidad-autocorregible_v2.html"
+},
+
+{
+  "titulo": "UT06 - Práctica 01: Seguridad y montaje del ordenador",
+  "fecha": "2026-11-16T15:00:00",
+  "descripcion": "Actividad autocorregible sobre prevención ESD, herramientas y procedimientos de montaje de un ordenador.",
+  "url": "publicaciones/ut06-practica01-montaje-autocorregible.html"
+},
+{
+  "titulo": "UT06 - Práctica 02: Comprobación y diagnóstico POST",
+  "fecha": "2026-11-16T15:05:00",
+  "descripcion": "Actividad autocorregible sobre el primer encendido, mensajes POST y señales acústicas de error.",
+  "url": "publicaciones/ut06-practica02-post-diagnostico-autocorregible.html"
 }
+
 
 
 ]
