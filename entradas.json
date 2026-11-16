@@ -93,7 +93,15 @@
   "fecha": "2026-11-16T18:40:00",
   "descripcion": "Entrenador interactivo autocorregible de 1.º SMR: 45 retos sobre mantenimiento, averías, señales, periféricos, limpieza y diagnóstico, con pistas y reintentos.",
   "url": "publicaciones/entrenador-ut07-reparacion-equipos.html"
+},
+  
+{
+  "titulo": "UT08 - Entrenador: Opciones de arranque e imágenes",
+  "fecha": "2026-11-16T19:00:00",
+  "descripcion": "Entrenador interactivo autocorregible de 1.º SMR: 66 retos sobre discos y particiones, arranque dual, recuperación, Live/ISO, copias de seguridad, restauración y Clonezilla. Con explicaciones y reintentos.",
+  "url": "publicaciones/entrenador-ut08-arranque-imagenes.html"
 }
+
 
 
 
