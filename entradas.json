@@ -43,6 +43,12 @@
   "fecha": "2026-11-15",
   "descripcion": "Aprender a publicar nuevas entradas en GitHub Pages mediante un script Bash en MAX 12.",
   "url": "publicaciones/automatizar-publicacion-github.html"
+},
+{
+  "titulo": "Sincronizar GitHub, Git y Apache",
+  "fecha": "2026-11-16T10:00:00",
+  "descripcion": "Guía para sincronizar mi web local con GitHub sin perder modificaciones.",
+  "url": "publicaciones/sincronizar-git-github-apache.html"
 }
 
 
