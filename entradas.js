@@ -7,14 +7,42 @@ fetch("entradas.json")
         return respuesta.json();
     })
     .then(entradas => {
-        const contenedor = document.getElementById("lista-publicaciones");
+        const contenedor =
+            document.getElementById("lista-publicaciones");
 
         contenedor.innerHTML = "";
 
-        // Ordenamos las entradas de más reciente a más antigua
-        entradas.sort((a, b) => b.fecha.localeCompare(a.fecha));
+        // Ordenar de más reciente a más antigua.
+        entradas.sort((a, b) =>
+            b.fecha.localeCompare(a.fecha)
+        );
+
+        let diaAnterior = "";
 
         entradas.forEach(entrada => {
+
+            // La fecha ocupa los primeros 10 caracteres.
+            const dia = entrada.fecha.substring(0, 10);
+            const hora = entrada.fecha.includes("T")
+                ? entrada.fecha.substring(11, 16)
+                : "";
+
+            // Crear una cabecera cuando cambie el día.
+            if (dia !== diaAnterior) {
+                const cabecera = document.createElement("h2");
+
+                cabecera.textContent = new Date(
+                    dia + "T12:00:00"
+                ).toLocaleDateString("es-ES", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
+                });
+
+                contenedor.appendChild(cabecera);
+                diaAnterior = dia;
+            }
+
             const articulo = document.createElement("article");
             const titulo = document.createElement("h3");
             const fecha = document.createElement("p");
@@ -22,7 +50,10 @@ fetch("entradas.json")
             const enlace = document.createElement("a");
 
             titulo.textContent = entrada.titulo;
-            fecha.textContent = entrada.fecha;
+            fecha.textContent = hora
+                ? "Publicado a las " + hora
+                : "Hora no indicada";
+
             descripcion.textContent = entrada.descripcion;
             enlace.textContent = "Leer publicación";
             enlace.href = entrada.url;
@@ -33,6 +64,8 @@ fetch("entradas.json")
     })
     .catch(error => {
         console.error("Error cargando publicaciones:", error);
-        document.getElementById("lista-publicaciones").textContent =
-            "No se pudieron cargar las publicaciones.";
+
+        document.getElementById("lista-publicaciones")
+            .textContent = "No se pudieron cargar las publicaciones.";
     });
+
