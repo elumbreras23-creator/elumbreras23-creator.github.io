@@ -113,6 +113,13 @@
   "fecha": "2026-11-16T20:00:00",
   "descripcion": "Entrenador autocorregible de 1.º SMR con 91 ejercicios sobre HDD, geometría, cálculos de capacidad, S.M.A.R.T., MBR, particiones, sistemas de archivos, IDE/PATA, SATA y SSD. Corrección inmediata, pistas, explicaciones y reintentos.",
   "url": "publicaciones/entrenador-ut04-dispositivos-almacenamiento.html"
+},
+
+{
+  "titulo": "UT05 - Entrenador: Adaptadores gráficos y sonido",
+  "fecha": "2026-11-16T19:50:00",
+  "descripcion": "Entrenador autocorregible de 1.º SMR con 84 retos sobre GPU, VRAM, PCIe, refrigeración, conexiones de vídeo, sonido digital y analógico, formatos y cálculos. Esquemas visuales, pistas y reintentos.",
+  "url": "publicaciones/entrenador-ut05-adaptadores-graficos-sonido.html"
 }
 
 
