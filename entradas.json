@@ -8,7 +8,7 @@
   },
   {
     "titulo": "Construcción de la web: Json y Java",
-    "fecha": "2026-11-14",
+    "fecha": "2026-11-14T12:00h",
     "descripcion": "Cómo configurar un servidor Apache en Linux MAX 12.",
     "url": "publicaciones/entrada2.html"
   },
@@ -21,14 +21,14 @@
 
 {
   "titulo": "UT02 - Prácticas de iniciación al hardware",
-  "fecha": "2026-11-15",
+  "fecha": "2026-11-15T17:00h",
   "descripcion": "Dos prácticas para 1.º SMR: identificación de componentes internos y funcionamiento básico del ordenador.",
   "url": "publicaciones/practicas-ut02.html"
 },
 
 {
   "titulo": "UT02 - Práctica 03: Funcionamiento interno del ordenador",
-  "fecha": "2026-11-15",
+  "fecha": "2026-11-15T18:00h",
   "descripcion": "Práctica avanzada de 1.º SMR sobre CPU, buses, registros, ALU, memoria y ciclo de instrucción, con simulador interactivo.",
   "url": "publicaciones/practica03-ut02.html"
 },
