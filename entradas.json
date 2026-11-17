@@ -120,6 +120,12 @@
   "fecha": "2026-11-16T19:50:00",
   "descripcion": "Entrenador autocorregible de 1.º SMR con 84 retos sobre GPU, VRAM, PCIe, refrigeración, conexiones de vídeo, sonido digital y analógico, formatos y cálculos. Esquemas visuales, pistas y reintentos.",
   "url": "publicaciones/entrenador-ut05-adaptadores-graficos-sonido.html"
+},
+  {
+  "titulo": "UT02 - Guía interactiva: Funcionamiento de los Sistemas Informáticos",
+  "fecha": "2026-11-17T09:30:00",
+  "descripcion": "Material teórico interactivo sobre hardware, software, arquitectura Von Neumann, CPU, memoria, buses y ciclo de ejecución de instrucciones. Incluye esquemas, simulaciones y actividades de autoevaluación.",
+  "url": "publicaciones/UT02-guia-interactiva.html"
 }
 
 
