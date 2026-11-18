@@ -126,8 +126,13 @@
   "fecha": "2026-11-17T09:30:00",
   "descripcion": "Material teórico interactivo sobre hardware, software, arquitectura Von Neumann, CPU, memoria, buses y ciclo de ejecución de instrucciones. Incluye esquemas, simulaciones y actividades de autoevaluación.",
   "url": "publicaciones/UT02-guia-interactiva.html"
+},
+{
+  "titulo": "UT06 - Taller de desmontaje y montaje de equipos",
+  "fecha": "2026-11-18T10:00:00",
+  "descripcion": "Guía interactiva de taller para desmontar, ensamblar y verificar un equipo microinformático.",
+  "url": "taller/ensamblado-equipos.html"
 }
-
 
 
 
